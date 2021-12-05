@@ -6,9 +6,10 @@ import (
 )
 
 type Menu struct {
-	Id    int64  `json:"id"`
-	Name  string `json:"name"`
-	Price int    `json:"price"`
+	Id        int64  `json:"id"`
+	Name      string `json:"name"`
+	Price     int    `json:"price"`
+	CreatedAt string `json:"created_at"`
 }
 
 type Order struct {
@@ -17,8 +18,8 @@ type Order struct {
 }
 
 type Item struct {
-	ItemId   int `json:"id"`
-	Quantity int `json:"tableNamber"`
+	ItemId   int `json:"itemId"`
+	Quantity int `json:"quantity"`
 }
 
 type Detail struct {
@@ -46,7 +47,7 @@ func (s *Store) ListMenu() ([]*Menu, error) {
 	var menu []*Menu
 	for rows.Next() {
 		m := Menu{}
-		err := rows.Scan(&m.Id, &m.Name, &m.Price)
+		err := rows.Scan(&m.Id, &m.Name, &m.Price, &m.CreatedAt)
 		if err != nil {
 			return nil, err
 		}

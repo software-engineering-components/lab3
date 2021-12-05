@@ -19,7 +19,7 @@ module.exports = class CrudWrapper {
         }
     }
 
-    async createSingle({ entity }) {
+    async createSingle(entity) {
         const url = `${this.baseUrl}/${this.apiName}`;
 
         try {
