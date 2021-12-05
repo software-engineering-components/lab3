@@ -1,0 +1,17 @@
+{
+  "name": "lab3",
+  "engines": {
+    "node": ">=10.8"
+  },
+  "version": "1.0.0",
+  "description": "Restaurant client",
+  "scripts": {
+    "start": "node example.ts"
+  },
+  "keywords": [],
+  "author": "Roman and Ruslan",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.24.0"
+  }
+}
