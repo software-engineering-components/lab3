@@ -19,20 +19,6 @@ module.exports = class CrudWrapper {
         }
     }
 
-    async create({ entities }) {
-        const url = `${this.baseUrl.baseUrl}/${this.apiName}`;
-
-        try {
-            const responses = await Promise.all(entities.map(_ => this.httpClient.post(url, _)));
-
-            return responses.map(_ => _.data);
-        } catch (error) {
-            console.error(`Error occured while creating ${this.apiName} at ${url}`);
-
-            throw error;
-        }
-    }
-
     async createSingle({ entity }) {
         const url = `${this.baseUrl.baseUrl}/${this.apiName}`;
 
@@ -46,7 +32,4 @@ module.exports = class CrudWrapper {
             throw error;
         }
     }
-
 }
-
-

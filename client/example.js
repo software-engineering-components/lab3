@@ -14,11 +14,10 @@ restaurant.listMenu()
 
 // Scenario 2: Create new order
 client.createOrder({
-  table: 1,
+  table_number: 1,
   items: [
     { itemId: 1, quantity: 3 },
-    { itemId: 2, quantity: 2 },
-    { itemId: 3, quantity: 1 },
+    { itemId: 2, quantity: 2 }
   ],
 })
     .then((order) => {
