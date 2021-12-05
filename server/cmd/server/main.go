@@ -11,7 +11,7 @@ import (
 	"github.com/software-engineering-components/lab3/server/db"
 )
 
-var httpPortNumber = flag.Int("p", 3000, "HTTP port number")
+const serverPort = 3000
 
 func NewDbConnection() (*sql.DB, error) {
 	conn := &db.Connection{
@@ -29,7 +29,7 @@ func main() {
 	flag.Parse()
 
 	// Create the server.
-	if server, err := ComposeApiServer(HttpPortNumber(*httpPortNumber)); err == nil {
+	if server, err := ComposeApiServer(serverPort); err == nil {
 		// Start it.
 		go func() {
 			log.Println("Starting restaurant server...")
