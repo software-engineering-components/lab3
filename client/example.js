@@ -13,8 +13,8 @@ restaurant.listMenu()
     });
 
 // Scenario 2: Create new order
-client.createOrder({
-  table_number: 1,
+restaurant.createOrder({
+  tableNamber: 1,
   items: [
     { itemId: 1, quantity: 3 },
     { itemId: 2, quantity: 2 }

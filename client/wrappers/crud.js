@@ -6,7 +6,7 @@ module.exports = class CrudWrapper {
     }
 
     async load() {
-        const url = `${this.baseUrl.baseUrl}/${this.apiName}`;
+        const url = `${this.baseUrl}/${this.apiName}`;
 
         try {
             const responses = await this.httpClient.get(url);
@@ -20,7 +20,7 @@ module.exports = class CrudWrapper {
     }
 
     async createSingle({ entity }) {
-        const url = `${this.baseUrl.baseUrl}/${this.apiName}`;
+        const url = `${this.baseUrl}/${this.apiName}`;
 
         try {
             const response = await this.httpClient.post(url, entity);

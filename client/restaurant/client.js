@@ -6,7 +6,6 @@ class Restaurant {
     constructor() {
         this.baseWrapper = R(axios, baseUrl)
         this.crudWrapper = this.baseWrapper.crud(API_NAMES.RESTAURANT);
-
     }
 
     listMenu() {
