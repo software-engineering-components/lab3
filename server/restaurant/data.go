@@ -3,10 +3,7 @@ package restaurant
 import (
 	"database/sql"
 	"fmt"
-	// "time"
 )
-
-const dateFormat = "2006-01-02 15:04:05"
 
 type Menu struct {
 	Id    int64  `json:"id"`
@@ -15,15 +12,20 @@ type Menu struct {
 }
 
 type Order struct {
-	Id                   int     `json:"id"`
-	TableNamber          int     `json:"tableNamber"`
+	Id          int `json:"id"`
+	TableNamber int `json:"tableNamber"`
+}
+
+type Item struct {
+	ItemId   int `json:"id"`
+	Quantity int `json:"tableNamber"`
 }
 
 type Detail struct {
-	OrderId     int     `json:"orderId"`
-	TotalPrice  float64 `json:"totalPrice"`
-	WithoutTax 	float64 `json:"withoutTax"`
-	Tips 				float64 `json:"tips"`
+	OrderId    int     `json:"orderId"`
+	TotalPrice float64 `json:"totalPrice"`
+	WithoutTax float64 `json:"withoutTax"`
+	Tips       float64 `json:"tips"`
 }
 
 type Store struct {
@@ -43,7 +45,7 @@ func (s *Store) ListMenu() ([]*Menu, error) {
 
 	var menu []*Menu
 	for rows.Next() {
-		m := MenuItem{}
+		m := Menu{}
 		err := rows.Scan(&m.Id, &m.Name, &m.Price)
 		if err != nil {
 			return nil, err
@@ -57,15 +59,12 @@ func (s *Store) ListMenu() ([]*Menu, error) {
 	return menu, nil
 }
 
-func (s *Store) CreateOrder(table_number int, items []*Order) (*Detail, error) {
+func (s *Store) CreateOrder(table_number int, items []*Item) (*Detail, error) {
 	if table_number <= 0 {
 		return nil, fmt.Errorf("Table number should be positive.")
 	}
 
-	orderRow := s.Db.QueryRow(
-		"INSERT INTO orders (\"table_number\") VALUES ($1) RETURNING id",
-		table
-	)
+	orderRow := s.Db.QueryRow("INSERT INTO orders (\"table_number\") VALUES ($1) RETURNING id", table_number)
 
 	var orderId int
 	err := orderRow.Scan(&orderId)
@@ -74,24 +73,16 @@ func (s *Store) CreateOrder(table_number int, items []*Order) (*Detail, error) {
 	}
 
 	for _, item := range items {
-		res := s.Db.QueryRow(
-			"SELECT id FROM menu WHERE id = $1",
-			item.itemId
-		)
+		res := s.Db.QueryRow("SELECT id FROM menu WHERE id = $1", item.ItemId)
 		var itemId int
 		if err := res.Scan(&itemId); err != nil {
-			return nil, fmt.Errorf("Item not supported: %d", item.itemId)
+			return nil, fmt.Errorf("Item not supported: %d", item.ItemId)
 		}
-		if item.quantity <= 0 {
+		if item.Quantity <= 0 {
 			return nil, fmt.Errorf("Quantity of items should more than 0: %d", item.ItemId)
 		}
 
-		s.Db.QueryRow(
-			"INSERT INTO order_details (order_id, menu_id, quantity) VALUES ($1, $2, $3)",
-			orderId,
-			item.itemId,
-			item.quantity
-		)
+		s.Db.QueryRow("INSERT INTO order_details (order_id, menu_id, quantity) VALUES ($1, $2, $3)", orderId, item.ItemId, item.Quantity)
 	}
 
 	var totalPrice float64 = 0.0
@@ -99,12 +90,9 @@ func (s *Store) CreateOrder(table_number int, items []*Order) (*Detail, error) {
 	var tips float64 = 0.0
 
 	for _, item := range items {
-		res := s.Db.QueryRow(
-			"SELECT id FROM menu WHERE id = $1",
-			item.itemId
-		)
+		res := s.Db.QueryRow("SELECT id FROM menu WHERE id = $1", item.ItemId)
 
-		withoutTax = withoutTax + (res.price * item.quantity)
+		withoutTax = withoutTax + (res.Price * item.Quantity)
 		totalPrice = withoutTax * (1 - 0.05)
 		tips = totalPrice * 0.01
 	}
@@ -113,7 +101,7 @@ func (s *Store) CreateOrder(table_number int, items []*Order) (*Detail, error) {
 		OrderId:    orderId,
 		TotalPrice: totalPrice,
 		WithoutTax: withoutTax,
-		Tips:       tips
+		Tips:       tips,
 	}
 
 	return detail, nil

@@ -2,7 +2,7 @@ package db
 
 import (
 	"database/sql"
-	"fmt"
+	"net/url"
 
 	_ "github.com/lib/pq"
 )
