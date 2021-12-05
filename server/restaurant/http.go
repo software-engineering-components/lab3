@@ -9,8 +9,8 @@ import (
 )
 
 type ClientOrder struct {
-	TableNamber int `json:"tableNamber"`
-	Items []*Order `json:"items"`
+	TableNamber int     `json:"tableNamber"`
+	Items       []*Item `json:"items"`
 }
 
 type HttpHandlerFunc http.HandlerFunc

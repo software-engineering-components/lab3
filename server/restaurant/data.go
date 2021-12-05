@@ -8,7 +8,7 @@ import (
 type Menu struct {
 	Id    int64  `json:"id"`
 	Name  string `json:"name"`
-	Price int64  `json:"price"`
+	Price int    `json:"price"`
 }
 
 type Order struct {
@@ -92,7 +92,14 @@ func (s *Store) CreateOrder(table_number int, items []*Item) (*Detail, error) {
 	for _, item := range items {
 		res := s.Db.QueryRow("SELECT id FROM menu WHERE id = $1", item.ItemId)
 
-		withoutTax = withoutTax + (res.Price * item.Quantity)
+		var Name string
+		var Price int
+
+		if err := res.Scan(&Price, &Name); err != nil {
+			return nil, fmt.Errorf("Item not supported: %d", item.ItemId)
+		}
+
+		withoutTax = withoutTax + float64((Price * item.Quantity))
 		totalPrice = withoutTax * (1 - 0.05)
 		tips = totalPrice * 0.01
 	}

@@ -30,5 +30,5 @@ func (c *Connection) ConnectionURL() string {
 }
 
 func (c *Connection) Open() (*sql.DB, error) {
-	return sql.Open("postgres", c.GetConnectionString())
+	return sql.Open("postgres", c.ConnectionURL())
 }

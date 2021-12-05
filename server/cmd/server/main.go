@@ -1,14 +1,12 @@
 package main
 
 import (
-	"bufio"
 	"database/sql"
 	"flag"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
-	"strings"
 
 	"github.com/software-engineering-components/lab3/server/db"
 )
@@ -20,7 +18,7 @@ func NewDbConnection() (*sql.DB, error) {
 		DbName:     "restaurant",
 		User:       "postgres",
 		Host:       "localhost",
-		Password: 	"postgres",
+		Password:   "postgres",
 		DisableSSL: true,
 	}
 	return conn.Open()

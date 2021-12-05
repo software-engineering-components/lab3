@@ -5,7 +5,7 @@ import "testing"
 func TestDbConnection_ConnectionURL(t *testing.T) {
 	conn := &Connection{
 		DbName:     "localhost",
-    Port:       "5432",
+		Port:       "5432",
 		User:       "postgres",
 		Password:   "postgres",
 		Host:       "localhost",

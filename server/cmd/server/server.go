@@ -11,13 +11,13 @@ import (
 type HttpPortNumber int
 
 type RestaurantApiServer struct {
-	Port    int
+	Port              int
 	RestaurantHandler restaurant.HttpHandlerFunc
-	server  *http.Server
+	server            *http.Server
 }
 
 func (s *RestaurantApiServer) Start() error {
-	if s.Handler == nil {
+	if s.RestaurantHandler == nil {
 		return fmt.Errorf("channels HTTP handler is not defined - cannot start")
 	}
 	if s.Port == 0 {
